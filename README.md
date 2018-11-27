@@ -2,14 +2,14 @@
 Jquery Paging v1.4
 
 You can see this plugin usage:
+
   <script type="text/javascript">
       $(function() {
         $("#listPage").JPaging();
       });
     </script>
-  </head>
-  <body>
-    <ul id="listPage">
+   
+    "<ul id="listPage">
       <li>1. li content</li>
       <li>2. li content</li>
       <li>3. li content</li>
@@ -26,4 +26,4 @@ You can see this plugin usage:
       <li>14. li content</li>
       <li>15. li content</li>
       </ul>
-    </ul>
+    </ul>"
