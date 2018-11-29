@@ -1,53 +1,60 @@
-//JQuery Paging Plugin v1.4
+//JQuery Paging Plugin v1.5
 //Written By Adnan ŞAHİN
 
 (function($) {
   "use strict";
 
   $.fn.JPaging = function(param) {
-    var params = $.extend({ pageSize: 10, visiblePageSize: 5 }, param);
+    var params = $.extend({ pageSize: 10, pageNumberSize: 5 }, param);
 
     var $pageSize = params.pageSize;
 
-    var $visiblePageSize = params.visiblePageSize;
+    var $pageNumberSize = params.pageNumberSize;
 
-    var $thisId = $(this).attr("id");
+    var $thisBody = $(this).find("tbody");
+    var $thisAllTr = $thisBody.find("tr");
+
     $("<div id='paging'></div>").insertAfter(this);
 
-    var $countLi = $(this).find("li").length;
+    var $countRow = $thisAllTr.length;
+    console.log("countTr:" + $countRow);
 
     var $currentIndex = 2;
-    var $pageCount = Math.round($countLi / $pageSize);
-    if ($countLi > 0) {
-      if ($pageSize * $pageCount < $countLi) {
+    var $pageCount = Math.round($countRow / $pageSize);
+    if ($countRow > 0) {
+      if ($pageSize * $pageCount < $countRow) {
         $pageCount++;
       }
     }
-    if ($visiblePageSize == 0) {
-      $visiblePageSize = 1;
+    if ($pageNumberSize == 0) {
+      $pageNumberSize = 1;
+    }
+    if ($pageNumberSize >= $pageCount) {
+      $pageNumberSize = $pageCount;
+      $currentIndex = 1;
     }
 
     //sayfa linkleri
-    if ($pageCount >= 1 && $visiblePageSize >= 1) {
+    if ($pageCount >= 1 && $pageNumberSize >= 1) {
       $("#paging").append(
         "<a href='javascript:void(0)' style='font-weight:700;'>" + "<"
       );
-      if ($pageCount > $visiblePageSize) {
+      if ($pageCount > $pageNumberSize) {
         $("#paging").append(
           "<a href='javascript:void(0)' id='pre_point' class='hidden'>" + "..."
         );
       }
 
       for (var i = 1; i <= $pageCount; i++) {
-        if (i <= $visiblePageSize) {
+        if (i <= $pageNumberSize) {
           $("#paging").append("<a href='javascript:void(0)'>" + i + "</a>");
-        } else if (i > $visiblePageSize) {
+        } else if (i > $pageNumberSize) {
           $("#paging").append(
             "<a href='javascript:void(0)' class='hidden'>" + i + "</a>"
           );
         }
       }
-      if ($pageCount > $visiblePageSize) {
+      if ($pageCount > $pageNumberSize) {
         $("#paging").append(
           "<a href='javascript:void(0)' id='next_point'>" + "..."
         );
@@ -56,16 +63,21 @@
         "<a href='javascript:void(0)' style='font-weight:700;'>" + ">"
       );
 
-      $("ul#" + $thisId + " li:gt(" + ($pageSize - 1) + ")").hide();
+      $thisBody.find("tr:gt(" + ($pageSize - 1) + ")").hide();
       $("#paging a:eq(" + $currentIndex + ")").addClass("aktif");
     }
     $("#pre_point").on("click", function(event) {
       event.preventDefault();
+
+      if ($currentIndex <= 1) {
+        return false;
+      }
+
       var prevIndex = $(this)
         .nextAll("a:not('.hidden,#next_point')")
         .first()
         .index();
-      var hideIndex = prevIndex + $visiblePageSize - 1;
+      var hideIndex = prevIndex + $pageNumberSize - 1;
       $("#paging a:eq(" + hideIndex + ")").addClass("hidden");
       $("#paging a").removeClass("aktif");
       $("#paging a:eq(" + (prevIndex - 1) + ")")
@@ -73,21 +85,21 @@
         .addClass("aktif");
       $currentIndex = prevIndex - 1;
       var gt = $pageSize * ($currentIndex - 1);
-      $("ul#" + $thisId + " li").hide();
+      $thisAllTr.hide();
       for (var i = gt - $pageSize; i < gt; i++) {
-        $("ul#" + $thisId + " li:eq(" + i + ")").show();
+        $thisAllTr.eq(i).show();
       }
-      if ($currentIndex - 1 == $pageCount && $visiblePageSize < $pageCount) {
+      if ($currentIndex - 1 == $pageCount && $pageNumberSize < $pageCount) {
         $("#next_point").addClass("hidden");
       } else if (
-        $currentIndex < $pageCount + $visiblePageSize &&
-        $visiblePageSize < $pageCount
+        $currentIndex < $pageCount + $pageNumberSize &&
+        $pageNumberSize < $pageCount
       ) {
         $("#next_point").removeClass("hidden");
       }
-      if ($currentIndex > 2 && $visiblePageSize < $pageCount) {
+      if ($currentIndex > 2 && $pageNumberSize < $pageCount) {
         $("#pre_point").removeClass("hidden");
-      } else if ($currentIndex <= 2 && $visiblePageSize < $pageCount) {
+      } else if ($currentIndex <= 2 && $pageNumberSize < $pageCount) {
         $("#pre_point").addClass("hidden");
       }
     });
@@ -97,8 +109,7 @@
         .prevAll("a:not('.hidden')")
         .first()
         .index();
-      console.log("prevIndex:" + prevIndex);
-      var hideIndex = prevIndex - $visiblePageSize + 1;
+      var hideIndex = prevIndex - $pageNumberSize + 1;
       $("#paging a:eq(" + hideIndex + ")").addClass("hidden");
       $("#paging a").removeClass("aktif");
       $("#paging a:eq(" + (prevIndex + 1) + ")")
@@ -106,53 +117,55 @@
         .addClass("aktif");
       $currentIndex = prevIndex;
       var gt = $pageSize * $currentIndex;
-      $("ul#" + $thisId + " li").hide();
+      $thisAllTr.hide();
       for (var i = gt - $pageSize; i < gt; i++) {
-        $("ul#" + $thisId + " li:eq(" + i + ")").show();
+        $thisAllTr.eq(i).show();
       }
-      if ($currentIndex == $pageCount && $visiblePageSize < $pageCount) {
+      if ($currentIndex == $pageCount && $pageNumberSize < $pageCount) {
         $("#next_point").addClass("hidden");
-      } else if ($currentIndex < $pageCount && $visiblePageSize < $pageCount) {
+      } else if ($currentIndex < $pageCount && $pageNumberSize < $pageCount) {
         $("#next_point").removeClass("hidden");
       }
-      if ($currentIndex > $visiblePageSize && $visiblePageSize < $pageCount) {
+      if ($currentIndex > $pageNumberSize && $pageNumberSize < $pageCount) {
         $("#pre_point").removeClass("hidden");
       } else if (
-        $currentIndex < $visiblePageSize &&
-        $visiblePageSize < $pageCount
+        $currentIndex < $pageNumberSize &&
+        $pageNumberSize < $pageCount
       ) {
         $("#pre_point").addClass("hidden");
       }
     });
     $("#paging").on("click", "a:not('#pre_point,#next_point')", function() {
       var $index = $(this).index();
+      console.log("$Index:" + $index);
       console.log(
-        "curindex:" +
+        "currentindex:" +
           $currentIndex +
           " visible_page_count:" +
-          $visiblePageSize +
+          $pageNumberSize +
           " pageCount:" +
           $pageCount
       );
+
       if ($(this).is("#paging a:first") === true) {
-        if ($currentIndex === 2) {
+        if ($currentIndex === 1) {
           return false;
         }
-        if ($currentIndex - 2 == $pageCount && $visiblePageSize < $pageCount) {
+        if ($currentIndex - 2 == $pageCount && $pageNumberSize < $pageCount) {
           $("#next_point").addClass("hidden");
         } else if (
-          $currentIndex - 2 <= $pageCount - $visiblePageSize &&
-          $visiblePageSize < $pageCount
+          $currentIndex - 2 <= $pageCount - $pageNumberSize &&
+          $pageNumberSize < $pageCount
         ) {
           $("#next_point").removeClass("hidden");
         }
-        if ($currentIndex - 1 > 2 && $visiblePageSize < $pageCount) {
+        if ($currentIndex - 1 > 2 && $pageNumberSize < $pageCount) {
           $("#pre_point").removeClass("hidden");
-        } else if ($currentIndex - 1 <= 2 && $visiblePageSize < $pageCount) {
+        } else if ($currentIndex - 1 <= 2 && $pageNumberSize < $pageCount) {
           $("#pre_point").addClass("hidden");
         }
         $currentIndex = $currentIndex - 1;
-        var gtFirst = $pageSize * ($currentIndex - 1);
+        var gtFirst = $pageSize * $currentIndex;
         $("#paging a").removeClass("aktif");
         $("#paging a:not('#next_point'):eq(" + $currentIndex + ")").addClass(
           "aktif"
@@ -163,74 +176,72 @@
         if ($("#paging a.hidden").length >= 1) {
           $(
             "#paging a:not('#next_point,#paging a:last'):eq(" +
-              ($currentIndex + $visiblePageSize) +
+              ($currentIndex + $pageNumberSize) +
               ")"
           ).addClass("hidden");
         }
-        $("ul#" + $thisId + " li").hide();
+        $thisAllTr.hide();
         for (var f = gtFirst - $pageSize; f < gtFirst; f++) {
-          $("ul#" + $thisId + " li:eq(" + f + ")").show();
+          $thisAllTr.eq(f).show();
         }
-        console.log(
-          "end curindex:" +
-            $currentIndex +
-            " visible_page_count:" +
-            $visiblePageSize +
-            " pageCount:" +
-            $pageCount
-        );
+
         return false;
       }
       if ($(this).is("#paging a:last") === true) {
-        if ($currentIndex - 1 === $pageCount) {
+        var $tmpCurrentIndex = $currentIndex;
+        if ($pageNumberSize < $pageCount) {
+          $tmpCurrentIndex--;
+        }
+        if ($tmpCurrentIndex === $pageCount) {
           return false;
         }
-        if ($currentIndex == $pageCount && $visiblePageSize < $pageCount) {
+        if ($currentIndex == $pageCount && $pageNumberSize < $pageCount) {
           $("#next_point").addClass("hidden");
-        } else if (
-          $currentIndex < $pageCount &&
-          $visiblePageSize < $pageCount
-        ) {
+        } else if ($currentIndex < $pageCount && $pageNumberSize < $pageCount) {
           $("#next_point").removeClass("hidden");
         }
-        if ($currentIndex > $visiblePageSize && $visiblePageSize < $pageCount) {
+        if ($currentIndex > $pageNumberSize && $pageNumberSize < $pageCount) {
           $("#pre_point").removeClass("hidden");
         } else if (
-          $currentIndex < $visiblePageSize &&
-          $visiblePageSize < $pageCount
+          $currentIndex < $pageNumberSize &&
+          $pageNumberSize < $pageCount
         ) {
           $("#pre_point").addClass("hidden");
         }
+        var gtLast = $pageSize * $currentIndex;
         $currentIndex = $currentIndex + 1;
-        var gtLast = $pageSize * ($currentIndex - 1);
+
         $("#paging a").removeClass("aktif");
         $("#paging a:eq(" + $currentIndex + ")").addClass("aktif");
         $("#paging a:eq(" + $currentIndex + ")").removeClass("hidden");
         if (
-          $currentIndex - 1 > $visiblePageSize &&
+          $currentIndex - 1 > $pageNumberSize &&
           $("#paging a.hidden").length >= 1
         ) {
-          console.log("cc" + ($currentIndex - $visiblePageSize));
           $(
             "#paging a:not('#next_point,#paging a:last'):eq(" +
-              ($currentIndex - $visiblePageSize) +
+              ($currentIndex - $pageNumberSize) +
               ")"
           ).addClass("hidden");
         }
-        $("ul#" + $thisId + " li").hide();
+        $thisAllTr.hide();
         for (var k = gtLast - $pageSize; k < gtLast; k++) {
-          $("ul#" + $thisId + " li:eq(" + k + ")").show();
+          $thisAllTr.eq(k).show();
         }
         return false;
       }
-      $currentIndex = $index - 1;
+      $currentIndex = $index;
+      if ($pageNumberSize < $pageCount) {
+        $currentIndex = $index - 1;
+      }
       var gt = $pageSize * $currentIndex;
       $("#paging a").removeClass("aktif");
       $(this).addClass("aktif");
-      $("ul#" + $thisId + " li").hide();
+      $thisAllTr.hide();
       for (var i = gt - $pageSize; i < gt; i++) {
-        $("ul#" + $thisId + " li:eq(" + i + ")").show();
+        $thisAllTr.eq(i).show();
       }
+      console.log("CurrentIndexLast:" + $currentIndex);
     });
   };
 })(jQuery);

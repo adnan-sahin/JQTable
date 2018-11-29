@@ -1,25 +1,31 @@
 body {
   margin: auto;
-  font: 13px Arial;
 }
-ul,
-li {
-  margin: 0;
+table {
+  margin: 30px;
   padding: 0;
-  list-style: none;
 }
-ul {
-  padding: 20px;
-}
-ul li {
+tr {
   background: #eee;
-  padding: 5px;
   border-bottom: 1px solid #ddd;
+  font-size: 16px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+tr[role="row"] {
+  height: 40px;
+}
+tr.odd {
+  background-color: lightgray;
+}
+tr.even {
+  background-color: white;
 }
 #paging {
-  padding: 0 20px 20px 20px;
+  padding: 0 10px 10px 0px;
   font-size: 13px;
   margin-top: 10px;
+  margin-left: 30px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 #paging a {
   color: #000;
@@ -27,6 +33,7 @@ ul li {
   padding: 8px 12px;
   margin-right: 5px;
   text-decoration: none;
+  font-weight: bold;
 }
 #paging a.aktif {
   background: #000 !important;
