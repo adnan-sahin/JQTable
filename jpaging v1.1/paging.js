@@ -7,6 +7,7 @@
   $.fn.JPaging = function(param) {
     var params = $.extend({ pageSize: 10, pageNumberSize: 5 }, param);
 
+    /***Begin Draw Table and Paging Buttons*****/
     var $pageSize = params.pageSize;
 
     var $pageNumberSize = params.pageNumberSize;
@@ -17,7 +18,6 @@
     $("<div id='paging'></div>").insertAfter(this);
 
     var $countRow = $thisAllTr.length;
-
 
     var $currentIndex = 2;
     var $pageCount = Math.round($countRow / $pageSize);
@@ -34,7 +34,6 @@
       $currentIndex = 1;
     }
 
-    //sayfa linkleri
     if ($pageCount >= 1 && $pageNumberSize >= 1) {
       $("#paging").append(
         "<a href='javascript:void(0)' style='font-weight:700;'>" + "<"
@@ -66,6 +65,10 @@
       $thisBody.find("tr:gt(" + ($pageSize - 1) + ")").hide();
       $("#paging a:eq(" + $currentIndex + ")").addClass("active");
     }
+
+    /***End Draw Table and Paging Buttons*****/
+
+    /**Begin PrePoint Button**/
     $("#pre_point").on("click", function(event) {
       event.preventDefault();
 
@@ -102,6 +105,10 @@
         $("#pre_point").addClass("hidden");
       }
     });
+    /**End PrePoint Button**/
+
+    /**Begin NextPoint Button**/
+
     $("#next_point").on("click", function(event) {
       event.preventDefault();
       var prevIndex = $(this)
@@ -134,9 +141,15 @@
         $("#pre_point").addClass("hidden");
       }
     });
+    
+    /**End NextPoint Button**/
+
+    /***Begin Paging Buttons***/
     $("#paging").on("click", "a:not('#pre_point,#next_point')", function() {
       var $index = $(this).index();
-   
+
+      /****Begin Prev Button***/
+
       if ($(this).is("#paging a:first") === true) {
         if ($currentIndex == 1) {
           return false;
@@ -188,6 +201,11 @@
 
         return false;
       }
+
+      /****End Prev Button***/
+
+      /****Begin Next Button***/
+
       if ($(this).is("#paging a:last") === true) {
         var $tmpCurrentIndex = $currentIndex;
         if ($pageNumberSize < $pageCount) {
@@ -235,18 +253,24 @@
           $thisAllTr.eq(k).show();
         }
         return false;
-      }
-      $currentIndex = $index;
-      if ($pageNumberSize < $pageCount) {
-        $currentIndex = $index - 1;
-      }
-      var gt = $pageSize * $currentIndex;
-      $("#paging a").removeClass("active");
-      $(this).addClass("active");
-      $thisAllTr.hide();
-      for (var i = gt - $pageSize; i < gt; i++) {
-        $thisAllTr.eq(i).show();
+        /****End Next Button***/
+      } else {
+        /****Begin Number Button***/
+        $currentIndex = $index;
+        if ($pageNumberSize < $pageCount) {
+          $currentIndex = $index - 1;
+        }
+        var gt = $pageSize * $currentIndex;
+        $("#paging a").removeClass("active");
+        $(this).addClass("active");
+        $thisAllTr.hide();
+        for (var i = gt - $pageSize; i < gt; i++) {
+          $thisAllTr.eq(i).show();
+        }
+        /****End Number Button***/
       }
     });
+
+    /***End Paging Buttons***/
   };
 })(jQuery);
