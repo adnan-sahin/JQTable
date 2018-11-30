@@ -35,7 +35,7 @@ tr.even {
   text-decoration: none;
   font-weight: bold;
 }
-#paging a.aktif {
+#paging a.active {
   background: #000 !important;
   color: #fff;
 }
