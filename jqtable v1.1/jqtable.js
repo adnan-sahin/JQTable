@@ -1,10 +1,10 @@
-//JQuery Paging Plugin v1.1
+//JQuery JQTable Plugin v1.1
 //Written By Adnan ŞAHİN
 
 (function($) {
   "use strict";
 
-  $.fn.JPaging = function(param) {
+  $.fn.JQTable = function(param) {
     var params = $.extend({ pageSize: 10, pageNumberSize: 5 }, param);
 
     /***Begin Draw Table and Paging Buttons*****/
@@ -36,11 +36,13 @@
 
     if ($pageCount >= 1 && $pageNumberSize >= 1) {
       $("#paging").append(
-        "<a href='javascript:void(0)' style='font-weight:700;'>" + "<"
+        "<a href='javascript:void(0)' style='font-weight:700;'>" + "<" + "</a>"
       );
       if ($pageCount > $pageNumberSize) {
         $("#paging").append(
-          "<a href='javascript:void(0)' id='pre_point' class='hidden'>" + "..."
+          "<a href='javascript:void(0)' id='pre_point' class='hidden'>" +
+            "..." +
+            "</a>"
         );
       }
 
@@ -55,11 +57,11 @@
       }
       if ($pageCount > $pageNumberSize) {
         $("#paging").append(
-          "<a href='javascript:void(0)' id='next_point'>" + "..."
+          "<a href='javascript:void(0)' id='next_point'>" + "..." + "</a>"
         );
       }
       $("#paging").append(
-        "<a href='javascript:void(0)' style='font-weight:700;'>" + ">"
+        "<a href='javascript:void(0)' style='font-weight:700;'>" + ">" + "</a>"
       );
 
       $thisBody.find("tr:gt(" + ($pageSize - 1) + ")").hide();
@@ -141,7 +143,7 @@
         $("#pre_point").addClass("hidden");
       }
     });
-    
+
     /**End NextPoint Button**/
 
     /***Begin Paging Buttons***/
@@ -207,11 +209,10 @@
       /****Begin Next Button***/
 
       if ($(this).is("#paging a:last") === true) {
-        var $tmpCurrentIndex = $currentIndex;
-        if ($pageNumberSize < $pageCount) {
-          $tmpCurrentIndex--;
-        }
-        if ($tmpCurrentIndex === $pageCount) {
+        if (
+          ($currentIndex === $pageCount && $pageNumberSize >= $pageCount) ||
+          ($currentIndex - 1 === $pageCount && $pageNumberSize < $pageCount)
+        ) {
           return false;
         }
         if ($currentIndex == $pageCount && $pageNumberSize < $pageCount) {
