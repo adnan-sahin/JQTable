@@ -4,9 +4,8 @@ This plugin was written by using Jquery libray.
 
 You can see below how to use this plugin.
 
-
 ```javascript
-$(function () {
+    $(function () {
       $(".tblEmployee").JQTable({ pageSize: 8, pageNumberSize: 4 });
     });
 ```
@@ -16,7 +15,7 @@ $(function () {
 
 **pageNumberSize**: It is used to view count of numbers at the bottom.
 
-<img src="https://i.ibb.co/jZmSPr9/Capture-v1.png" alt="Capture-v1" border="0">
+<img src="https://i.ibb.co/jZmSPr9/Capture-v1.png" alt="Capture-v1" />
 
 **Demo:**
 
