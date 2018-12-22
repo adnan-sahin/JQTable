@@ -1,0 +1,48 @@
+body {
+  margin: auto;
+}
+table {
+  margin: 30px;
+  padding: 0;
+}
+tr {
+  background: #eee;
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+tr[role="row"] {
+  height: 40px;
+}
+tr.odd {
+  background-color: lightgray;
+}
+tr.even {
+  background-color: white;
+}
+#paging {
+  padding: 0 10px 10px 0px;
+  font-size: 13px;
+  margin-top: 10px;
+  margin-left: 30px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+#paging a {
+  color: #000;
+  background: #e0e0e0;
+  padding: 8px 12px;
+  margin-right: 5px;
+  text-decoration: none;
+  font-weight: bold;
+}
+#paging a.active {
+  background: #000 !important;
+  color: #fff;
+}
+#paging a:hover {
+  border: 1px solid #000;
+}
+
+.hidden {
+  display: none;
+}
