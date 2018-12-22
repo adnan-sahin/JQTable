@@ -1,2 +1,2 @@
 # JQTable
-Jquery Paging v1.4
+Table Paging v1.1
